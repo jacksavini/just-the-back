@@ -6,11 +6,19 @@ const cors = require("cors");
 
 const PORT = process.env.PORT || 5002;
 
+const allowedOrigins = ["http://www.jacksavini.com", "http://jacksavini.com"]
+
 // Middleware to parse URL-encoded form data
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors({
-    origins: ["http://www.jacksavini.com", "http://jacksavini.com"]
+    origin: (origin, callback) => {
+        if (allowedOrigins.indexOf(origin) !== -1 || !origin){
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"))
+        }
+    }
 }));
 
 // Create a connection to the MySQL server
