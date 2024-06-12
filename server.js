@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 5002;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors({
-    origin: "http://www.jacksavini.com"
+    origins: ["http://www.jacksavini.com", "http://jacksavini.com"]
 }));
 
 // Create a connection to the MySQL server
