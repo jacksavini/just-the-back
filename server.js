@@ -8,18 +8,23 @@ const PORT = process.env.PORT || 5002;
 
 const allowedOrigins = ["http://www.jacksavini.com", "http://jacksavini.com"]
 
+const corsOptions = {
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // Allow cookies
+    optionsSuccessStatus: 204
+  };
+
 // Middleware to parse URL-encoded form data
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors({
-    origin: (origin, callback) => {
-        if (allowedOrigins.indexOf(origin) !== -1 || !origin){
-            callback(null, true);
-        } else {
-            callback(new Error("Not allowed by CORS"))
-        }
-    }
-}));
+app.use(cors(corsOptions));
 
 // Create a connection to the MySQL server
 const connection = mysql.createPool({
